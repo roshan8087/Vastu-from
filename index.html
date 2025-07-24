@@ -1,122 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Business Vastu Form</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to right, #ece9e6, #ffffff);
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Business Vastu Consultation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Open+Sans&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-    .form-container {
-      background: #fff;
-      padding: 40px 30px;
-      border-radius: 16px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-      width: 100%;
-      max-width: 400px;
-    }
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background: url('https://images.unsplash.com/photo-1599940824396-6411b87a36f4?auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #333;
+    }
 
-    h2 {
-      text-align: center;
-      margin-bottom: 25px;
-      color: #333;
-    }
+    .form-wrapper {
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+    }
 
-    label {
-      font-weight: bold;
-      display: block;
-      margin-top: 15px;
-      color: #555;
-    }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      color: #B8860B;
+      margin-bottom: 20px;
+    }
 
-    input {
-      width: 100%;
-      padding: 12px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      font-size: 15px;
-    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+      font-size: 15px;
+      text-align: left;
+    }
 
-    button {
-      width: 100%;
-      padding: 14px;
-      margin-top: 25px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 17px;
-      transition: background-color 0.3s ease;
-    }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+    }
 
-    button:hover {
-      background-color: #45a049;
-    }
+    button {
+      margin-top: 25px;
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(45deg, #d4af37, #b8860b);
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
 
-    #status {
-      text-align: center;
-      margin-top: 20px;
-      font-weight: bold;
-      font-size: 14px;
-    }
-  </style>
+    button:hover {
+      background: linear-gradient(45deg, #b8860b, #d4af37);
+    }
+
+    #status {
+      margin-top: 15px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-  <div class="form-container">
-    <h2>Business Vastu Form</h2>
-    <form id="vastuForm">
-      <label for="name">Name</label>
-      <input type="text" name="Name" id="name" required />
+  <div class="form-wrapper">
+    <h1>Business Vastu Form</h1>
+    <form id="vastuForm">
+      <label for="name">Full Name</label>
+      <input type="text" name="Name" id="name" required />
 
-      <label for="number">Number</label>
-      <input type="text" name="Number" id="number" required />
+      <label for="number">Contact Number</label>
+      <input type="text" name="Number" id="number" required />
 
-      <button type="submit">Submit</button>
-    </form>
-    <p id="status"></p>
-  </div>
+      <button type="submit">Get Consultation</button>
+    </form>
+    <p id="status"></p>
+  </div>
 
-  <script>
-    const form = document.getElementById("vastuForm");
-    const status = document.getElementById("status");
+  <script>
+    const form = document.getElementById("vastuForm");
+    const status = document.getElementById("status");
 
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
 
-      fetch("https://sheetdb.io/api/v1/fvn5kosp5tu30", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          data: Object.fromEntries(new FormData(form)),
-        }),
-      })
-        .then((res) => {
-          if (res.ok) {
-            status.innerText = "✅ Submitted successfully!";
-            status.style.color = "green";
-            form.reset();
-          } else {
-            status.innerText = "❌ Submission failed!";
-            status.style.color = "red";
-          }
-        })
-        .catch(() => {
-          status.innerText = "❌ Network error!";
-          status.style.color = "red";
-        });
-    });
-  </script>
+      fetch("https://sheetdb.io/api/v1/fvn5kosp5tu30", {
+        method: "POST",
+        body: JSON.stringify({ data: Object.fromEntries(new FormData(form)) }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (response.ok) {
+            status.textContent = "✅ Submitted successfully!";
+            status.style.color = "green";
+            form.reset();
+          } else {
+            status.textContent = "❌ Submission failed. Try again.";
+            status.style.color = "red";
+          }
+        })
+        .catch(() => {
+          status.textContent = "❌ Error connecting. Try again later.";
+          status.style.color = "red";
+        });
+    });
+  </script>
 </body>
 </html>
