@@ -57,34 +57,40 @@
   </table>
 
   <script>
-    fetch("https://sheetdb.io/api/v1/fvn5kosp5tu30")
-      .then(res => res.json())
-      .then(data => {
-        const table = document.getElementById("responses");
-        const tbody = document.getElementById("table-body");
-        const loader = document.getElementById("loading");
-        
-        loader.style.display = "none";
-        table.style.display = "table";
+    function loadData() {
+      fetch("https://sheetdb.io/api/v1/fvn5kosp5tu30")
+        .then(res => res.json())
+        .then(data => {
+          const table = document.getElementById("responses");
+          const tbody = document.getElementById("table-body");
+          const loader = document.getElementById("loading");
 
-        data.forEach(entry => {
-          const row = document.createElement("tr");
+          loader.style.display = "none";
+          table.style.display = "table";
+          tbody.innerHTML = ""; // Clear previous data
 
-          const nameCell = document.createElement("td");
-          nameCell.textContent = entry.Name;
-          row.appendChild(nameCell);
+          data.forEach(entry => {
+            const row = document.createElement("tr");
 
-          const numberCell = document.createElement("td");
-          numberCell.textContent = entry.Number;
-          row.appendChild(numberCell);
+            const nameCell = document.createElement("td");
+            nameCell.textContent = entry.Name;
+            row.appendChild(nameCell);
 
-          tbody.appendChild(row);
+            const numberCell = document.createElement("td");
+            numberCell.textContent = entry.Number;
+            row.appendChild(numberCell);
+
+            tbody.appendChild(row);
+          });
+        })
+        .catch(err => {
+          document.getElementById("loading").textContent = "Failed to load responses.";
+          console.error(err);
         });
-      })
-      .catch(err => {
-        document.getElementById("loading").textContent = "Failed to load responses.";
-        console.error(err);
-      });
+    }
+
+    loadData();
+    setInterval(loadData, 1000); // Refresh every 1 second // Refresh every 10 seconds
   </script>
 </body>
 </html>
