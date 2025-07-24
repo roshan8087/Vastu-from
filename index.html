@@ -89,7 +89,7 @@
     form.addEventListener("submit", function (e) {
       e.preventDefault();
 
-      fetch("https://sheetdb.io/api/v1/mtrbfkcw4f7sg", {
+      fetch("https://docs.google.com/spreadsheets/d/1EifVkhCZAjgBkfO4tO7cM1RTIrhzgqT0C-Gn5COHt5s/edit?usp=sharing", {
         method: "POST",
         body: JSON.stringify({
           data: Object.fromEntries(new FormData(form)),
