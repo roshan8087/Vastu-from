@@ -4,56 +4,62 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Business Vastu Consultation</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Open+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
 
     body {
-      font-family: 'Open Sans', sans-serif;
-      background: url('https://images.unsplash.com/photo-1599940824396-6411b87a36f4?auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
-      background-size: cover;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to right, #fefcea, #f1da36);
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      color: #333;
     }
 
-    .form-wrapper {
-      background-color: rgba(255, 255, 255, 0.95);
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      max-width: 450px;
+      width: 100%;
+      overflow: hidden;
       padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-      max-width: 420px;
-      width: 90%;
       text-align: center;
     }
 
-    h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 28px;
-      color: #B8860B;
+    .card img {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    .card h1 {
+      font-size: 26px;
+      color: #b88a44;
       margin-bottom: 20px;
     }
 
     label {
       display: block;
       margin-top: 15px;
-      font-weight: 600;
-      font-size: 15px;
+      font-weight: bold;
+      font-size: 14px;
+      color: #333;
       text-align: left;
     }
 
     input {
       width: 100%;
       padding: 12px;
-      margin-top: 5px;
+      margin-top: 6px;
+      border-radius: 10px;
       border: 1px solid #ccc;
-      border-radius: 8px;
       font-size: 14px;
     }
 
@@ -62,8 +68,8 @@
       padding: 12px;
       width: 100%;
       border: none;
-      border-radius: 8px;
-      background: linear-gradient(45deg, #d4af37, #b8860b);
+      border-radius: 10px;
+      background: #b88a44;
       color: white;
       font-size: 16px;
       font-weight: bold;
@@ -72,25 +78,26 @@
     }
 
     button:hover {
-      background: linear-gradient(45deg, #b8860b, #d4af37);
+      background: #a77934;
     }
 
     #status {
       margin-top: 15px;
-      font-size: 14px;
       font-weight: bold;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
-  <div class="form-wrapper">
+  <div class="card">
+    <img src="https://images.unsplash.com/photo-1618354691249-6f8e3cb1c4a7?auto=format&fit=crop&w=800&q=80" alt="Jewelry Background" />
     <h1>Business Vastu Form</h1>
     <form id="vastuForm">
       <label for="name">Full Name</label>
-      <input type="text" name="Name" id="name" required />
+      <input type="text" id="name" name="Name" required />
 
       <label for="number">Contact Number</label>
-      <input type="text" name="Number" id="number" required />
+      <input type="text" id="number" name="Number" required />
 
       <button type="submit">Get Consultation</button>
     </form>
