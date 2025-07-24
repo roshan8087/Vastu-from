@@ -1,42 +1,109 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Business Vastu Entry</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Business Vastu Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .form-container {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #status {
+      text-align: center;
+      margin-top: 15px;
+      font-weight: bold;
+      color: green;
+    }
+  </style>
 </head>
-<body style="font-family:sans-serif; padding:20px">
-  <h2>Business Vastu Form</h2>
-  <form id="vastuForm">
-    <label>Name</label><br>
-    <input type="text" name="name" required><br><br>
+<body>
+  <div class="form-container">
+    <h2>Business Vastu Form</h2>
+    <form id="vastuForm">
+      <label>Name</label>
+      <input type="text" name="name" required />
 
-    <label>Number</label><br>
-    <input type="number" name="number" required><br><br>
+      <label>Number</label>
+      <input type="number" name="number" required />
 
-    <button type="submit">Submit</button>
-  </form>
-
-  <p id="status" style="color: green;"></p>
+      <button type="submit">Submit</button>
+    </form>
+    <p id="status"></p>
+  </div>
 
   <script>
     const form = document.getElementById("vastuForm");
     const status = document.getElementById("status");
 
-    form.addEventListener("submit", function(e) {
+    form.addEventListener("submit", function (e) {
       e.preventDefault();
 
       fetch("https://sheetdb.io/api/v1/mtrbfkcw4f7sg", {
         method: "POST",
-        body: JSON.stringify({ data: Object.fromEntries(new FormData(form)) }),
+        body: JSON.stringify({
+          data: Object.fromEntries(new FormData(form)),
+        }),
         headers: {
-          "Content-Type": "application/json"
-        }
-      }).then(response => {
+          "Content-Type": "application/json",
+        },
+      }).then((response) => {
         if (response.ok) {
-          status.innerText = "Submitted successfully!";
+          status.innerText = "✅ Submitted successfully!";
           form.reset();
         } else {
-          status.innerText = "Submission failed. Try again.";
+          status.innerText = "❌ Submission failed!";
+          status.style.color = "red";
         }
       });
     });
