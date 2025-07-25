@@ -1,91 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="refresh" content="0"> <!-- fallback in case JS fails -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Live Responses - Business Vastu</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submitted Vastu Responses</title>
   <style>
     body {
-      font-family: 'Roboto', sans-serif;
-      background-color: #fff8e1;
-      margin: 0;
-      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: #f8f8f8;
+      padding: 40px;
     }
     h1 {
       text-align: center;
-      color: #b88a44;
-      margin-bottom: 20px;
-    }
-    #table-container {
-      overflow-x: auto;
+      color: #444;
     }
     table {
       width: 100%;
       border-collapse: collapse;
+      margin-top: 30px;
       background: white;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 5px 10px rgba(0,0,0,0.1);
     }
     th, td {
-      padding: 12px;
-      border: 1px solid #ddd;
+      padding: 15px;
       text-align: left;
+      border-bottom: 1px solid #eee;
     }
     th {
-      background-color: #f1d36c;
-      color: #000;
+      background-color: #f1da36;
+      color: #333;
     }
-    @media (max-width: 768px) {
-      table, thead, tbody, th, td, tr {
-        display: block;
-      }
-      th {
-        position: sticky;
-        top: 0;
-        background: #f1d36c;
-      }
-      td {
-        padding-left: 50%;
-      }
+    tr:hover {
+      background-color: #f9f9f9;
+    }
+    .loader {
+      text-align: center;
+      font-size: 18px;
+      margin-top: 20px;
+      color: #666;
     }
   </style>
 </head>
 <body>
-  <h1>Live Form Responses</h1>
-  <div id="table-container">Loading...</div>
+  <h1>Business Vastu Submissions</h1>
+  <div class="loader" id="loading">Loading responses...</div>
+  <table id="responses" style="display:none;">
+    <thead>
+      <tr>
+        <th>Full Name</th>
+        <th>Contact Number</th>
+      </tr>
+    </thead>
+    <tbody id="table-body">
+      <!-- Data will be inserted here -->
+    </tbody>
+  </table>
 
   <script>
-    const csvURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSz0FQJqiQHn9d6VtIp1tdAK0ARCJzVGQpWH9bAwjP8umXmCUvo6pMGtWPbND744G9o6iXI6XgH-UAG/pub?output=csv';
+    function loadData() {
+      fetch("https://sheetdb.io/api/v1/fvn5kosp5tu30")
+        .then(res => res.json())
+        .then(data => {
+          const table = document.getElementById("responses");
+          const tbody = document.getElementById("table-body");
+          const loader = document.getElementById("loading");
 
-    async function fetchCSV() {
-      try {
-        const res = await fetch(csvURL);
-        const text = await res.text();
-        const rows = text.trim().split('\n').map(row => row.split(','));
+          loader.style.display = "none";
+          table.style.display = "table";
+          tbody.innerHTML = ""; // Clear previous data
 
-        let html = '<table><thead><tr>';
-        rows[0].forEach(header => html += `<th>${header}</th>`);
-        html += '</tr></thead><tbody>';
+          data.forEach(entry => {
+            const row = document.createElement("tr");
 
-        for (let i = 1; i < rows.length; i++) {
-          html += '<tr>';
-          rows[i].forEach(cell => html += `<td>${cell}</td>`);
-          html += '</tr>';
-        }
+            const nameCell = document.createElement("td");
+            nameCell.textContent = entry.Name;
+            row.appendChild(nameCell);
 
-        html += '</tbody></table>';
-        document.getElementById('table-container').innerHTML = html;
-      } catch (err) {
-        document.getElementById('table-container').innerHTML = '<p>Error loading data.</p>';
-        console.error('CSV Fetch Error:', err);
-      }
+            const numberCell = document.createElement("td");
+            numberCell.textContent = entry.Number;
+            row.appendChild(numberCell);
+
+            tbody.appendChild(row);
+          });
+        })
+        .catch(err => {
+          document.getElementById("loading").textContent = "Failed to load responses.";
+          console.error(err);
+        });
     }
 
-    // Initial load + auto-refresh every 1 sec
-    fetchCSV();
-    setInterval(fetchCSV, 1000);
+    loadData();
+    setInterval(loadData, 1000); // Refresh every 1 second // Refresh every 10 seconds
   </script>
 </body>
 </html>
