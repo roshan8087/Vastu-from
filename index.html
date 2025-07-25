@@ -1,23 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Vastu Form</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Business Vastu Form</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(to right, #f9d423, #ff4e50);
+    }
+    .container {
+      max-width: 400px;
+      margin: 50px auto;
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+    .container img {
+      max-width: 100px;
+    }
+    h2 {
+      margin-bottom: 30px;
+      color: #c49b3e;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #c49b3e;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #b08830;
+    }
+  </style>
 </head>
 <body>
-  <h2>Vastu Form</h2>
-  <form>
-    <label for="name">Full Name:</label>
-    <input type="text" name="name" required><br><br>
-
-    <label for="contact">Contact Number:</label>
-    <input type="text" name="contact" required><br><br>
-
-    <input type="submit" value="Submit">
-  </form>
+  <div class="container">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Om_symbol.svg/1200px-Om_symbol.svg.png" alt="Om Logo">
+    <h2>Business Vastu Form</h2>
+    <form id="vastuForm">
+      <input type="text" name="name" placeholder="Full Name" required />
+      <input type="text" name="contact" placeholder="Contact Number" required />
+      <button type="submit">Get Consultation</button>
+    </form>
+  </div>
 
   <script>
-    document.querySelector("form").addEventListener("submit", function(e) {
+    document.querySelector("#vastuForm").addEventListener("submit", function(e) {
       e.preventDefault();
       const fullName = document.querySelector('input[name="name"]').value;
       const contactNumber = document.querySelector('input[name="contact"]').value;
@@ -34,11 +77,12 @@
       })
       .then(response => response.text())
       .then(data => {
-        alert("Form submitted successfully!");
+        alert("✅ Form submitted successfully!");
+        document.querySelector("#vastuForm").reset();
       })
       .catch(error => {
         console.error("Error:", error);
-        alert("Failed to submit form.");
+        alert("❌ Failed to submit form.");
       });
     });
   </script>
