@@ -2,98 +2,66 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <title>Business Vastu - Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Business Vastu Consultation</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
   <style>
     body {
-      margin: 0;
+      background-color: #fff8e1;
       font-family: 'Roboto', sans-serif;
-      background: linear-gradient(to right, #fff8e1, #f1d36c);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 40px 20px;
-    }
-
-    .container {
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-      max-width: 600px;
-      width: 100%;
-      padding: 30px;
-    }
-
-    .container h1 {
-      text-align: center;
-      color: #b88a44;
-      margin-bottom: 20px;
-    }
-
-    form {
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
     }
 
-    input, textarea, button {
-      font-family: inherit;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-
-    button {
-      background-color: #b88a44;
-      color: white;
-      border: none;
-      cursor: pointer;
-      transition: 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #9f742e;
-    }
-
-    .success-message {
-      display: none;
-      color: green;
+    h1 {
+      color: #b88a44;
+      font-size: 2.5em;
+      margin-bottom: 20px;
       text-align: center;
-      margin-top: 15px;
+    }
+
+    p {
+      font-size: 1.2em;
+      color: #555;
+      text-align: center;
+      max-width: 600px;
+      margin-bottom: 30px;
+    }
+
+    a.button {
+      display: inline-block;
+      background-color: #f1d36c;
+      color: #333;
+      text-decoration: none;
+      padding: 15px 30px;
+      border-radius: 10px;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: background 0.3s;
+    }
+
+    a.button:hover {
+      background-color: #eac94a;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.8em;
+      }
+      p {
+        font-size: 1em;
+        padding: 0 20px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Business Vastu Consultation</h1>
-    <form id="consultForm" name="consultForm">
-      <input type="text" name="name" placeholder="Your Name" required />
-      <input type="text" name="business" placeholder="Business Type" required />
-      <input type="tel" name="phone" placeholder="Phone Number" required />
-      <input type="email" name="email" placeholder="Email Address" />
-      <textarea name="message" placeholder="Describe your requirement" rows="4" required></textarea>
-      <button type="submit">Submit</button>
-      <div class="success-message" id="successMessage">Thank you! Your response has been recorded.</div>
-    </form>
-  </div>
-
-  <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbxvstjbKjH4m8BkS2Dl_quVybxL6jSyfU1P23H4lmfyeV8E9OiLHFFMsPPXcLlOcBjW/exec';
-    const form = document.forms['consultForm'];
-    const successMessage = document.getElementById('successMessage');
-
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-        .then(response => {
-          form.reset();
-          successMessage.style.display = 'block';
-        })
-        .catch(error => console.error('Error!', error.message));
-    });
-  </script>
+  <h1>Welcome to Business Vastu</h1>
+  <p>Track live customer submissions and contact numbers in one place. Stay updated with each new form response!</p>
+  <a class="button" href="responses.html">View Live Responses</a>
 </body>
 </html>
