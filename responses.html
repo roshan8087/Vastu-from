@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Live Responses - Business Vastu</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.4/tabletop.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
   <style>
     body {
@@ -59,38 +58,33 @@
   <div id="table-container">Loading responses...</div>
 
   <script>
-    const publicSpreadsheetURL = 'https://docs.google.com/spreadsheets/d/1UlbMlZjpF0lsCyxeQaq0cJzj7LNUwl5Rnp6rA5RVk2A/pubhtml';
+    const csvUrl = 'YOUR_CSV_EXPORT_LINK_HERE'; // Replace this with your real CSV link
 
-    function fetchData() {
-      Tabletop.init({
-        key: publicSpreadsheetURL,
-        callback: showInfo,
-        simpleSheet: true
-      });
+    function fetchAndDisplayCSV() {
+      fetch(csvUrl)
+        .then(response => response.text())
+        .then(csvText => {
+          const rows = csvText.trim().split('\n').map(row => row.split(','));
+          const headers = rows[0];
+          let html = '<table><thead><tr>';
+          headers.forEach(h => html += `<th>${h}</th>`);
+          html += '</tr></thead><tbody>';
+          rows.slice(1).forEach(row => {
+            html += '<tr>';
+            row.forEach(cell => html += `<td>${cell}</td>`);
+            html += '</tr>';
+          });
+          html += '</tbody></table>';
+          document.getElementById('table-container').innerHTML = html;
+        })
+        .catch(error => {
+          document.getElementById('table-container').innerHTML = '<p>Error loading data.</p>';
+          console.error('CSV Fetch Error:', error);
+        });
     }
 
-    function showInfo(data) {
-      const container = document.getElementById('table-container');
-      if (data.length === 0) {
-        container.innerHTML = '<p>No data found.</p>';
-        return;
-      }
-
-      let html = '<table><thead><tr>';
-      const headers = Object.keys(data[0]);
-      headers.forEach(h => html += `<th>${h}</th>`);
-      html += '</tr></thead><tbody>';
-      data.forEach(row => {
-        html += '<tr>';
-        headers.forEach(h => html += `<td>${row[h]}</td>`);
-        html += '</tr>';
-      });
-      html += '</tbody></table>';
-      container.innerHTML = html;
-    }
-
-    fetchData();
-    setInterval(fetchData, 1000); // refresh every 1 second
+    fetchAndDisplayCSV();
+    setInterval(fetchAndDisplayCSV, 5000); // Refresh every 5 seconds
   </script>
 </body>
 </html>
