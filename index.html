@@ -1,137 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Business Vastu Consultation</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Roboto', sans-serif;
-      background: linear-gradient(to right, #fefcea, #f1da36);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-
-    .card {
-      background: #fff;
-      border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      max-width: 450px;
-      width: 100%;
-      overflow: hidden;
-      padding: 30px;
-      text-align: center;
-    }
-
-    .card img {
-      width: 100%;
-      height: auto;
-      border-radius: 12px;
-      margin-bottom: 20px;
-    }
-
-    .card h1 {
-      font-size: 26px;
-      color: #b88a44;
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-      font-size: 14px;
-      color: #333;
-      text-align: left;
-    }
-
-    input {
-      width: 100%;
-      padding: 12px;
-      margin-top: 6px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      font-size: 14px;
-    }
-
-    button {
-      margin-top: 25px;
-      padding: 12px;
-      width: 100%;
-      border: none;
-      border-radius: 10px;
-      background: #b88a44;
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    button:hover {
-      background: #a77934;
-    }
-
-    #status {
-      margin-top: 15px;
-      font-weight: bold;
-      font-size: 14px;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <title>Vastu Form</title>
 </head>
 <body>
-  <div class="card">
-    <img src="https://drive.google.com/thumbnail?id=1Kwpduv1bMGxgPIRo_gY43elq8vI7ASV_" alt="Jewelry Background" />
-    <h1>Business Vastu Form</h1>
-    <form id="vastuForm">
-      <label for="name">Full Name</label>
-      <input type="text" id="name" name="Name" required />
+  <h2>Vastu Form</h2>
+  <form>
+    <label for="name">Full Name:</label>
+    <input type="text" name="name" required><br><br>
 
-      <label for="number">Contact Number</label>
-      <input type="text" id="number" name="Number" required />
+    <label for="contact">Contact Number:</label>
+    <input type="text" name="contact" required><br><br>
 
-      <button type="submit">Get Consultation</button>
-    </form>
-    <p id="status"></p>
-  </div>
+    <input type="submit" value="Submit">
+  </form>
 
   <script>
-    const form = document.getElementById("vastuForm");
-    const status = document.getElementById("status");
-
-    form.addEventListener("submit", function (e) {
+    document.querySelector("form").addEventListener("submit", function(e) {
       e.preventDefault();
+      const fullName = document.querySelector('input[name="name"]').value;
+      const contactNumber = document.querySelector('input[name="contact"]').value;
 
-      fetch("https://sheetdb.io/api/v1/fvn5kosp5tu30", {
+      fetch("https://script.google.com/macros/s/AKfycbyAGhryXbJOeLIJqr3f9ZT8gzsW0CTpRqnkkVNuNr_MUql6R-eSwTL4H5Gp3imQhtq6/exec", {
         method: "POST",
-        body: JSON.stringify({ data: Object.fromEntries(new FormData(form)) }),
         headers: {
           "Content-Type": "application/json",
         },
-      })
-        .then((response) => {
-          if (response.ok) {
-            status.textContent = "✅ Submitted successfully!";
-            status.style.color = "green";
-            form.reset();
-          } else {
-            status.textContent = "❌ Submission failed. Try again.";
-            status.style.color = "red";
-          }
+        body: JSON.stringify({
+          fullName: fullName,
+          contactNumber: contactNumber
         })
-        .catch(() => {
-          status.textContent = "❌ Error connecting. Try again later.";
-          status.style.color = "red";
-        });
+      })
+      .then(response => response.text())
+      .then(data => {
+        alert("Form submitted successfully!");
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        alert("Failed to submit form.");
+      });
     });
   </script>
 </body>
