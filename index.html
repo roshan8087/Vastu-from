@@ -2,66 +2,98 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Business Vastu - Home</title>
+  <title>Business Vastu - Live Data</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
   <style>
     body {
-      background-color: #fff8e1;
       font-family: 'Roboto', sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
+      background-color: #fff8e1;
+      padding: 20px;
       margin: 0;
     }
-
     h1 {
       color: #b88a44;
-      font-size: 2.5em;
+      text-align: center;
       margin-bottom: 20px;
-      text-align: center;
     }
-
-    p {
-      font-size: 1.2em;
-      color: #555;
-      text-align: center;
-      max-width: 600px;
-      margin-bottom: 30px;
+    #table-container {
+      overflow-x: auto;
     }
-
-    a.button {
-      display: inline-block;
-      background-color: #f1d36c;
-      color: #333;
-      text-decoration: none;
-      padding: 15px 30px;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
       border-radius: 10px;
-      font-weight: bold;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      transition: background 0.3s;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-
-    a.button:hover {
-      background-color: #eac94a;
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: left;
     }
-
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 1.8em;
+    th {
+      background-color: #f1d36c;
+    }
+    @media (max-width: 768px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
       }
-      p {
-        font-size: 1em;
-        padding: 0 20px;
+      th {
+        position: sticky;
+        top: 0;
+        background: #f1d36c;
+      }
+      td {
+        border: none;
+        border-bottom: 1px solid #ccc;
+        position: relative;
+        padding-left: 50%;
       }
     }
   </style>
 </head>
 <body>
-  <h1>Welcome to Business Vastu</h1>
-  <p>Track live customer submissions and contact numbers in one place. Stay updated with each new form response!</p>
-  <a class="button" href="responses.html">View Live Responses</a>
+  <h1>Business Vastu - Live Form Data</h1>
+  <div id="table-container">Loading data...</div>
+
+  <script>
+    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSz0FQJqiQHn9d6VtIp1tdAK0ARCJzVGQpWH9bAwjP8umXmCUvo6pMGtWPbND744G9o6iXI6XgH-UAG/pub?output=csv';
+
+    function fetchAndDisplayCSV() {
+      fetch(csvUrl)
+        .then(response => response.text())
+        .then(csvText => {
+          const rows = csvText.trim().split('\n').map(row => row.split(','));
+          const headers = rows[0];
+
+          const idxName = headers.indexOf('Name');
+          const idxCustomer = headers.indexOf('Customer');
+          const idxNumber = headers.indexOf('Number');
+
+          if (idxName < 0 || idxCustomer < 0 || idxNumber < 0) {
+            throw new Error("Required columns not found.");
+          }
+
+          let html = '<table><thead><tr><th>Name</th><th>Customer</th><th>Number</th></tr></thead><tbody>';
+          rows.slice(1).forEach(row => {
+            html += '<tr>';
+            html += `<td>${row[idxName]}</td>`;
+            html += `<td>${row[idxCustomer]}</td>`;
+            html += `<td>${row[idxNumber]}</td>`;
+            html += '</tr>';
+          });
+          html += '</tbody></table>';
+          document.getElementById('table-container').innerHTML = html;
+        })
+        .catch(err => {
+          document.getElementById('table-container').innerHTML = '<p>Error loading data.</p>';
+          console.error(err);
+        });
+    }
+
+    fetchAndDisplayCSV();
+    setInterval(fetchAndDisplayCSV, 5000); // auto-refresh every 5 sec
+  </script>
 </body>
 </html>
