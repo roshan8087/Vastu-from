@@ -2,99 +2,137 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Business Vastu Consultation</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    body {
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
       font-family: 'Roboto', sans-serif;
-      background: linear-gradient(to right, #fff8e1, #f1d36c);
+      background: linear-gradient(to right, #fefcea, #f1da36);
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      padding: 40px 20px;
     }
 
-    .container {
-      background: white;
+    .card {
+      background: #fff;
       border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-      max-width: 600px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      max-width: 450px;
       width: 100%;
+      overflow: hidden;
       padding: 30px;
+      text-align: center;
     }
 
-    .container h1 {
-      text-align: center;
+    .card img {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    .card h1 {
+      font-size: 26px;
       color: #b88a44;
       margin-bottom: 20px;
     }
 
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      font-size: 14px;
+      color: #333;
+      text-align: left;
     }
 
-    input, textarea, button {
-      font-family: inherit;
+    input {
+      width: 100%;
       padding: 12px;
+      margin-top: 6px;
+      border-radius: 10px;
       border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px;
+      font-size: 14px;
     }
 
     button {
-      background-color: #b88a44;
-      color: white;
+      margin-top: 25px;
+      padding: 12px;
+      width: 100%;
       border: none;
+      border-radius: 10px;
+      background: #b88a44;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
       cursor: pointer;
-      transition: 0.3s ease;
+      transition: background 0.3s ease;
     }
 
     button:hover {
-      background-color: #9f742e;
+      background: #a77934;
     }
 
-    .success-message {
-      display: none;
-      color: green;
-      text-align: center;
+    #status {
       margin-top: 15px;
+      font-weight: bold;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Business Vastu Consultation</h1>
-    <form id="consultForm" name="consultForm">
-      <input type="text" name="name" placeholder="Your Name" required />
-      <input type="text" name="business" placeholder="Business Type" required />
-      <input type="tel" name="phone" placeholder="Phone Number" required />
-      <input type="email" name="email" placeholder="Email Address" />
-      <textarea name="message" placeholder="Describe your requirement" rows="4" required></textarea>
-      <button type="submit">Submit</button>
-      <div class="success-message" id="successMessage">Thank you! Your response has been recorded.</div>
+  <div class="card">
+    <img src="https://drive.google.com/thumbnail?id=1Kwpduv1bMGxgPIRo_gY43elq8vI7ASV_" alt="Jewelry Background" />
+    <h1>Business Vastu Form</h1>
+    <form id="vastuForm">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" name="Name" required />
+
+      <label for="number">Contact Number</label>
+      <input type="text" id="number" name="Number" required />
+
+      <button type="submit">Get Consultation</button>
     </form>
+    <p id="status"></p>
   </div>
 
   <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbxvstjbKjH4m8BkS2Dl_quVybxL6jSyfU1P23H4lmfyeV8E9OiLHFFMsPPXcLlOcBjW/exec';
-    const form = document.forms['consultForm'];
-    const successMessage = document.getElementById('successMessage');
+    const form = document.getElementById("vastuForm");
+    const status = document.getElementById("status");
 
-    form.addEventListener('submit', e => {
+    form.addEventListener("submit", function (e) {
       e.preventDefault();
-      fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-        .then(response => {
-          form.reset();
-          successMessage.style.display = 'block';
+
+      fetch("https://sheetdb.io/api/v1/fvn5kosp5tu30", {
+        method: "POST",
+        body: JSON.stringify({ data: Object.fromEntries(new FormData(form)) }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (response.ok) {
+            status.textContent = "✅ Submitted successfully!";
+            status.style.color = "green";
+            form.reset();
+          } else {
+            status.textContent = "❌ Submission failed. Try again.";
+            status.style.color = "red";
+          }
         })
-        .catch(error => console.error('Error!', error.message));
+        .catch(() => {
+          status.textContent = "❌ Error connecting. Try again later.";
+          status.style.color = "red";
+        });
     });
   </script>
 </body>
 </html>
-
