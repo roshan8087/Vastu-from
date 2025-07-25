@@ -8,65 +8,92 @@
   <style>
     body {
       margin: 0;
-      padding: 0;
       font-family: 'Roboto', sans-serif;
       background: linear-gradient(to right, #fff8e1, #f1d36c);
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
+      padding: 40px 20px;
     }
 
     .container {
-      background-color: #fff;
+      background: white;
       border-radius: 20px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-      max-width: 800px;
-      width: 95%;
-      padding: 30px 20px;
-      margin: 40px 0;
-      text-align: center;
+      max-width: 600px;
+      width: 100%;
+      padding: 30px;
     }
 
-    .header-image {
-      width: 100%;
-      max-height: 220px;
-      object-fit: cover;
-      border-radius: 15px;
+    .container h1 {
+      text-align: center;
+      color: #b88a44;
       margin-bottom: 20px;
     }
 
-    h1 {
-      color: #b88a44;
-      font-size: 28px;
-      margin-bottom: 25px;
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
     }
 
-    iframe {
-      width: 100%;
-      height: 800px;
+    input, textarea, button {
+      font-family: inherit;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #b88a44;
+      color: white;
       border: none;
-      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.3s ease;
     }
 
-    @media (max-width: 768px) {
-      h1 {
-        font-size: 24px;
-      }
+    button:hover {
+      background-color: #9f742e;
+    }
 
-      iframe {
-        height: 1000px;
-      }
+    .success-message {
+      display: none;
+      color: green;
+      text-align: center;
+      margin-top: 15px;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <img class="header-image" src="https://drive.google.com/uc?export=view&id=1Kwpduv1bMGxgPIRo_gY43elq8vI7ASV_" alt="Business Vastu Banner" />
     <h1>Business Vastu Consultation</h1>
-    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSd3LGJNX-_urBxZxUZGpR01DGHVvA_LJOj7M593sZHNKF2Rgg/viewform?embedded=true">
-      Loading…
-    </iframe>
+    <form id="consultForm" name="consultForm">
+      <input type="text" name="name" placeholder="Your Name" required />
+      <input type="text" name="business" placeholder="Business Type" required />
+      <input type="tel" name="phone" placeholder="Phone Number" required />
+      <input type="email" name="email" placeholder="Email Address" />
+      <textarea name="message" placeholder="Describe your requirement" rows="4" required></textarea>
+      <button type="submit">Submit</button>
+      <div class="success-message" id="successMessage">Thank you! Your response has been recorded.</div>
+    </form>
   </div>
+
+  <script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxvstjbKjH4m8BkS2Dl_quVybxL6jSyfU1P23H4lmfyeV8E9OiLHFFMsPPXcLlOcBjW/exec';
+    const form = document.forms['consultForm'];
+    const successMessage = document.getElementById('successMessage');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+        .then(response => {
+          form.reset();
+          successMessage.style.display = 'block';
+        })
+        .catch(error => console.error('Error!', error.message));
+    });
+  </script>
 </body>
 </html>
