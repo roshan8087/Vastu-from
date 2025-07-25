@@ -18,13 +18,15 @@
       text-align: center;
       margin-bottom: 20px;
     }
+    #table-container {
+      overflow-x: auto;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
       background: white;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      overflow-x: auto;
     }
     th, td {
       padding: 12px;
@@ -43,6 +45,12 @@
         top: 0;
         background: #f1d36c;
       }
+      td {
+        border: none;
+        border-bottom: 1px solid #ccc;
+        position: relative;
+        padding-left: 50%;
+      }
     }
   </style>
 </head>
@@ -51,7 +59,7 @@
   <div id="table-container">Loading responses...</div>
 
   <script>
-    const publicSpreadsheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSz0FQJqiQHn9d6VtIp1tdAK0ARCJzVGQpWH9bAwjP8umXmCUvo6pMGtWPbND744G9o6iXI6XgH-UAG/pubhtml';
+    const publicSpreadsheetURL = 'https://docs.google.com/spreadsheets/d/1UlbMlZjpF0lsCyxeQaq0cJzj7LNUwl5Rnp6rA5RVk2A/pubhtml';
 
     function fetchData() {
       Tabletop.init({
