@@ -1,96 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Live Responses - Business Vastu</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.4/tabletop.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="1"> <!-- Refresh every 1 second -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Responses</title>
   <style>
     body {
+      margin: 0;
       font-family: 'Roboto', sans-serif;
       background-color: #fff8e1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
       padding: 20px;
-      margin: 0;
+    }
+    iframe {
+      width: 100%;
+      height: 100vh;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+    .container {
+      width: 100%;
+      max-width: 1200px;
     }
     h1 {
-      color: #b88a44;
       text-align: center;
-      margin-bottom: 20px;
-    }
-    #table-container {
-      overflow-x: auto;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    th, td {
-      padding: 12px;
-      border: 1px solid #ddd;
-      text-align: left;
-    }
-    th {
-      background-color: #f1d36c;
-    }
-    @media (max-width: 768px) {
-      table, thead, tbody, th, td, tr {
-        display: block;
-      }
-      th {
-        position: sticky;
-        top: 0;
-        background: #f1d36c;
-      }
-      td {
-        border: none;
-        border-bottom: 1px solid #ccc;
-        position: relative;
-        padding-left: 50%;
-      }
+      color: #b88a44;
+      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
-  <h1>Live Responses</h1>
-  <div id="table-container">Loading responses...</div>
-
-  <script>
-    const publicSpreadsheetURL = 'https://docs.google.com/spreadsheets/d/1UlbMlZjpF0lsCyxeQaq0cJzj7LNUwl5Rnp6rA5RVk2A/pubhtml';
-
-    function fetchData() {
-      Tabletop.init({
-        key: publicSpreadsheetURL,
-        callback: showInfo,
-        simpleSheet: true
-      });
-    }
-
-    function showInfo(data) {
-      const container = document.getElementById('table-container');
-      if (data.length === 0) {
-        container.innerHTML = '<p>No data found.</p>';
-        return;
-      }
-
-      let html = '<table><thead><tr>';
-      const headers = Object.keys(data[0]);
-      headers.forEach(h => html += `<th>${h}</th>`);
-      html += '</tr></thead><tbody>';
-      data.forEach(row => {
-        html += '<tr>';
-        headers.forEach(h => html += `<td>${row[h]}</td>`);
-        html += '</tr>';
-      });
-      html += '</tbody></table>';
-      container.innerHTML = html;
-    }
-
-    fetchData();
-    setInterval(fetchData, 1000); // refresh every 1 second
-  </script>
+  <div class="container">
+    <h1>Live Form Responses</h1>
+    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSz0FQJqiQHn9d6VtIp1tdAK0ARCJzVGQpWH9bAwjP8umXmCUvo6pMGtWPbND744G9o6iXI6XgH-UAG/pubhtml?widget=true&amp;headers=false"></iframe>
+  </div>
 </body>
 </html>
