@@ -2,95 +2,62 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Submitted Vastu Responses</title>
+  <title>Responses</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f8f8f8;
-      padding: 40px;
+      background-color: #f4f4f4;
+      padding: 20px;
     }
-    h1 {
+    h2 {
       text-align: center;
-      color: #444;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 30px;
-      background: white;
-      box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-    }
-    th, td {
-      padding: 15px;
-      text-align: left;
-      border-bottom: 1px solid #eee;
-    }
-    th {
-      background-color: #f1da36;
-      color: #333;
-    }
-    tr:hover {
-      background-color: #f9f9f9;
-    }
-    .loader {
-      text-align: center;
-      font-size: 18px;
-      margin-top: 20px;
-      color: #666;
+    .response-entry {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 10px;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
     }
   </style>
 </head>
 <body>
-  <h1>Business Vastu Submissions</h1>
-  <div class="loader" id="loading">Loading responses...</div>
-  <table id="responses" style="display:none;">
-    <thead>
-      <tr>
-        <th>Full Name</th>
-        <th>Contact Number</th>
-      </tr>
-    </thead>
-    <tbody id="table-body">
-      <!-- Data will be inserted here -->
-    </tbody>
-  </table>
+  <h2>Live Responses</h2>
+  <div id="response-container"></div>
 
   <script>
-    function loadData() {
-      fetch("https://sheetdb.io/api/v1/fvn5kosp5tu30")
-        .then(res => res.json())
-        .then(data => {
-          const table = document.getElementById("responses");
-          const tbody = document.getElementById("table-body");
-          const loader = document.getElementById("loading");
+    const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQXOwaP2EMefVZaIdT1PGGzEnkNh_rp5qPzkpkvYjJhWo-pNFRcfAgm61-cEJUElpLLBJxcWCDU1vgu/pub?output=csv';
 
-          loader.style.display = "none";
-          table.style.display = "table";
-          tbody.innerHTML = ""; // Clear previous data
+    async function fetchResponses() {
+      try {
+        const response = await fetch(sheetURL);
+        const data = await response.text();
 
-          data.forEach(entry => {
-            const row = document.createElement("tr");
+        const rows = data.trim().split('\n').map(row => row.split(','));
+        const headers = rows[0];
+        const entries = rows.slice(1);
 
-            const nameCell = document.createElement("td");
-            nameCell.textContent = entry.Name;
-            row.appendChild(nameCell);
+        const container = document.getElementById("response-container");
+        container.innerHTML = "";
 
-            const numberCell = document.createElement("td");
-            numberCell.textContent = entry.Number;
-            row.appendChild(numberCell);
-
-            tbody.appendChild(row);
+        entries.forEach(row => {
+          const entry = document.createElement("div");
+          entry.className = "response-entry";
+          headers.forEach((header, index) => {
+            const p = document.createElement("p");
+            p.textContent = `${header.trim()}: ${row[index] || ''}`;
+            entry.appendChild(p);
           });
-        })
-        .catch(err => {
-          document.getElementById("loading").textContent = "Failed to load responses.";
-          console.error(err);
+          container.appendChild(entry);
         });
+      } catch (err) {
+        console.error("Error fetching responses:", err);
+      }
     }
 
-    loadData();
-    setInterval(loadData, 1000); // Refresh every 1 second // Refresh every 10 seconds
+    fetchResponses();
+    setInterval(fetchResponses, 1000);
   </script>
 </body>
 </html>
