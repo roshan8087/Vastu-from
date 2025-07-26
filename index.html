@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Business Vastu Consultation</title>
+  <title>Vastu</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
     * {
@@ -35,7 +35,6 @@
     .card img {
       width: 150px;
       height: auto;
-      border-radius: 12px;
       margin-bottom: 20px;
     }
 
@@ -76,12 +75,16 @@
 </head>
 <body>
   <div class="card">
-    <img src="https://drive.google.com/file/d/1Kwpduv1bMGxgPIRo_gY43elq8vI7ASV_/view?usp=drive_link" alt="Vastu Logo" />
-    <h1>Business Vastu Form</h1>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Ganesha_icon.svg/800px-Ganesha_icon.svg.png" />
+    <h1>Vastu</h1>
     <form id="consultForm" name="consultForm">
-      <input type="text" name="name" placeholder="Full Name" required />
-      <input type="text" name="phone" placeholder="Contact Number" required />
-      <button type="submit">Get Consultation</button>
+      <label for="name" style="font-weight: bold; text-align: left; display: block; margin-top: 15px;">Name / नाव</label>
+      <input type="text" id="name" name="name" placeholder="Enter your full name" required />
+
+      <label for="phone" style="font-weight: bold; text-align: left; display: block; margin-top: 15px;">Customer Name and Number / कस्टमरचे नाव आणि नंबर</label>
+      <input type="text" id="phone" name="phone" placeholder="" required />
+
+      <button type="submit">Submit</button>
       <p id="status"></p>
     </form>
   </div>
