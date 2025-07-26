@@ -14,11 +14,12 @@
 
     body {
       font-family: 'Roboto', sans-serif;
-      background: linear-gradient(to right, #fefcea, #f1da36);
+      background: linear-gradient(to right, #fff8e1, #f1d36c);
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
+      padding: 40px 20px;
     }
 
     .card {
@@ -32,19 +33,19 @@
     }
 
     .card img {
-      width: 100%;
+      width: 150px;
       height: auto;
       border-radius: 12px;
       margin-bottom: 20px;
     }
 
     .card h1 {
-      font-size: 26px;
+      font-size: 24px;
       color: #b88a44;
       margin-bottom: 20px;
     }
 
-    input, textarea, button {
+    input, button {
       width: 100%;
       padding: 12px;
       margin-top: 10px;
@@ -53,62 +54,55 @@
       font-size: 14px;
     }
 
-    textarea {
-      resize: vertical;
-    }
-
     button {
-      margin-top: 20px;
       background: #b88a44;
       color: white;
-      font-size: 16px;
       font-weight: bold;
+      border: none;
       cursor: pointer;
       transition: background 0.3s ease;
-      border: none;
     }
 
     button:hover {
       background: #a77934;
     }
 
-    #successMessage {
+    #status {
       margin-top: 15px;
       font-weight: bold;
       font-size: 14px;
-      color: green;
-      display: none;
     }
   </style>
 </head>
 <body>
   <div class="card">
-    <img src="https://drive.google.com/thumbnail?id=1Kwpduv1bMGxgPIRo_gY43elq8vI7ASV_" alt="Jewelry Background" />
+    <img src="https://i.ibb.co/QYj0P6g/ganesha-transparent.png" alt="Vastu Logo" />
     <h1>Business Vastu Form</h1>
     <form id="consultForm" name="consultForm">
-      <input type="text" name="name" placeholder="Your Full Name" required />
-      <input type="text" name="business" placeholder="Business Type" required />
-      <input type="tel" name="phone" placeholder="Contact Number" required />
-      <input type="email" name="email" placeholder="Email Address (optional)" />
-      <textarea name="message" placeholder="Describe your requirement" rows="4" required></textarea>
+      <input type="text" name="name" placeholder="Full Name" required />
+      <input type="text" name="phone" placeholder="Contact Number" required />
       <button type="submit">Get Consultation</button>
+      <p id="status"></p>
     </form>
-    <p id="successMessage">Thank you! Your response has been recorded.</p>
   </div>
 
   <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbxvstjbKjH4m8BkS2Dl_quVybxL6jSyfU1P23H4lmfyeV8E9OiLHFFMsPPXcLlOcBjW/exec';
     const form = document.forms['consultForm'];
-    const successMessage = document.getElementById('successMessage');
+    const status = document.getElementById('status');
 
     form.addEventListener('submit', e => {
       e.preventDefault();
       fetch(scriptURL, { method: 'POST', body: new FormData(form) })
         .then(response => {
           form.reset();
-          successMessage.style.display = 'block';
+          status.style.color = 'green';
+          status.textContent = '✅ Submitted successfully!';
         })
-        .catch(error => console.error('Error!', error.message));
+        .catch(error => {
+          status.style.color = 'red';
+          status.textContent = '❌ Error connecting. Try again later.';
+        });
     });
   </script>
 </body>
