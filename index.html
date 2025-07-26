@@ -3,88 +3,96 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Business Vastu Form</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap">
+  <title>Business Vastu Consultation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
-      font-family: 'Montserrat', sans-serif;
-      background: linear-gradient(to right, #f9d423, #ff4e50);
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to right, #fff8e1, #f1d36c);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 40px 20px;
     }
+
     .container {
-      max-width: 400px;
-      margin: 50px auto;
       background: white;
-      padding: 40px;
       border-radius: 20px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
-      text-align: center;
-    }
-    .container img {
-      max-width: 100px;
-    }
-    h2 {
-      margin-bottom: 30px;
-      color: #c49b3e;
-    }
-    input[type="text"] {
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      max-width: 600px;
       width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 10px;
+      padding: 30px;
+    }
+
+    .container h1 {
+      text-align: center;
+      color: #b88a44;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    input, textarea, button {
+      font-family: inherit;
+      padding: 12px;
       border: 1px solid #ccc;
-    }
-    button {
-      background: #c49b3e;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 10px;
+      border-radius: 8px;
       font-size: 16px;
-      cursor: pointer;
     }
+
+    button {
+      background-color: #b88a44;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
     button:hover {
-      background: #b08830;
+      background-color: #9f742e;
+    }
+
+    .success-message {
+      display: none;
+      color: green;
+      text-align: center;
+      margin-top: 15px;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <img src="https://i.imgur.com/N9z0TTV.png" alt="Om Logo">
-    <h2>Business Vastu Form</h2>
-    <form id="vastuForm">
-      <input type="text" name="name" placeholder="Full Name" required />
-      <input type="text" name="contact" placeholder="Contact Number" required />
-      <button type="submit">Get Consultation</button>
+    <h1>Business Vastu Consultation</h1>
+    <form id="consultForm" name="consultForm">
+      <input type="text" name="name" placeholder="Your Name" required />
+      <input type="text" name="business" placeholder="Business Type" required />
+      <input type="tel" name="phone" placeholder="Phone Number" required />
+      <input type="email" name="email" placeholder="Email Address" />
+      <textarea name="message" placeholder="Describe your requirement" rows="4" required></textarea>
+      <button type="submit">Submit</button>
+      <div class="success-message" id="successMessage">Thank you! Your response has been recorded.</div>
     </form>
   </div>
 
   <script>
-    document.querySelector("#vastuForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const fullName = document.querySelector('input[name="name"]').value;
-      const contactNumber = document.querySelector('input[name="contact"]').value;
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxvstjbKjH4m8BkS2Dl_quVybxL6jSyfU1P23H4lmfyeV8E9OiLHFFMsPPXcLlOcBjW/exec';
+    const form = document.forms['consultForm'];
+    const successMessage = document.getElementById('successMessage');
 
-      fetch("https://script.google.com/macros/s/AKfycbweruJaNMcZbM4cbqxBcrcK3SMji6D9HwBE6JQ50Tf6BrVvmREQBR404w_wN3CSz1Es/exec
-", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          fullName: fullName,
-          contactNumber: contactNumber
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+        .then(response => {
+          form.reset();
+          successMessage.style.display = 'block';
         })
-      })
-      .then(response => response.text())
-      .then(data => {
-        alert("✅ Form submitted successfully!");
-        document.querySelector("#vastuForm").reset();
-      })
-      .catch(error => {
-        console.error("Error:", error);
-        alert("❌ Failed to submit form.");
-      });
+        .catch(error => console.error('Error!', error.message));
     });
   </script>
 </body>
