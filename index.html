@@ -92,19 +92,13 @@
       <label for="name" style="font-weight: bold; display: block; margin-top: 15px; text-align: left;">Name / नाव</label>
       <input type="text" id="name" name="name" placeholder="Enter your full name" required />
 
-      
-      <label for="customer1" style="font-weight: bold; display: block; margin-top: 15px; text-align: left;">Customer Name and Number / कस्टमरचे नाव आणि नंबर</label>
-      <input type="text" id="customer1" name="customer1" placeholder="1. Customer Name and Number / कस्टमरचे नाव आणि नंबर" required />
-
-      <input type="text" id="customer2" name="customer2" placeholder="2. Customer Name and Number / कस्टमरचे नाव आणि नंबर" />
-
-      <input type="text" id="customer3" name="customer3" placeholder="3. Customer Name and Number / कस्टमरचे नाव आणि नंबर" />
-
-      <input type="text" id="customer4" name="customer4" placeholder="4. Customer Name and Number / कस्टमरचे नाव आणि नंबर" />
-
-      <input type="text" id="customer5" name="customer5" placeholder="5. Customer Name and Number / कस्टमरचे नाव आणि नंबर" />
-
-      <button type="submit">Submit</button>
+      <label for="customers" style="font-weight: bold; display: block; margin-top: 15px; text-align: left;">Customer Name and Number / कस्टमरचे नाव आणि नंबर</label>
+      <input type="text" id="customer1" placeholder="1. Customer Name and Number / कस्टमरचे नाव आणि नंबर" />
+      <input type="text" id="customer2" placeholder="2. Customer Name and Number / कस्टमरचे नाव आणि नंबर" />
+      <input type="text" id="customer3" placeholder="3. Customer Name and Number / कस्टमरचे नाव आणि नंबर" />
+      <input type="text" id="customer4" placeholder="4. Customer Name and Number / कस्टमरचे नाव आणि नंबर" />
+      <input type="text" id="customer5" placeholder="5. Customer Name and Number / कस्टमरचे नाव आणि नंबर" />
+      <input type="hidden" id="customers" name="customers" />
       <p id="status"></p>
     </form>
   </div>
@@ -116,7 +110,29 @@
 
     form.addEventListener('submit', e => {
       e.preventDefault();
-      fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+      let countdown = 5;
+      status.style.color = 'blue';
+      status.textContent = `Submitting... Please wait (${countdown})`;
+      const countdownInterval = setInterval(() => {
+        countdown--;
+        if (countdown > 0) {
+          status.textContent = `Submitting... Please wait (${countdown})`;
+        } else {
+          clearInterval(countdownInterval);
+        }
+      }, 1000);
+
+      const formData = new FormData(form);
+      const allCustomers = [
+        document.getElementById('customer1').value,
+        document.getElementById('customer2').value,
+        document.getElementById('customer3').value,
+        document.getElementById('customer4').value,
+        document.getElementById('customer5').value
+      ].filter(val => val.trim() !== "").join("
+");
+      formData.set('customers', allCustomers);
+      fetch(scriptURL, { method: 'POST', body: formData })
         .then(response => {
           form.reset();
           status.style.color = 'green';
