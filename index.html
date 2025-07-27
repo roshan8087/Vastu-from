@@ -39,6 +39,8 @@
       width: 150px;
       height: auto;
       margin-bottom: 20px;
+      box-shadow: 0 0 25px rgba(255, 204, 0, 0.6);
+      animation: pulseGlow 2.5s infinite;
     }
 
     .card h1 {
@@ -50,10 +52,11 @@
     input, button {
       width: 100%;
       padding: 12px;
-      margin-top: 10px;
+      margin: 10px 0;
       border-radius: 10px;
       border: 1px solid #ccc;
       font-size: 14px;
+      display: block;
     }
 
     button {
@@ -74,18 +77,32 @@
       font-weight: bold;
       font-size: 14px;
     }
+  @keyframes pulseGlow {
+      0% { box-shadow: 0 0 15px rgba(255, 204, 0, 0.4); }
+      50% { box-shadow: 0 0 35px rgba(255, 204, 0, 0.9); }
+      100% { box-shadow: 0 0 15px rgba(255, 204, 0, 0.4); }
+    }
   </style>
 </head>
 <body>
   <div class="card">
     <img src="https://lh3.googleusercontent.com/d/1Bf-tVeCqfJ2HAYf-ezoDxn9wKzWrw_n6=w600-h600" />
-    <h1>Vastu</h1>
+    
     <form id="consultForm" name="consultForm">
-      <label for="name" style="font-weight: bold; text-align: left; display: block; margin-top: 15px;">Name / नाव</label>
+      <label for="name" style="font-weight: bold; display: block; margin-top: 15px; text-align: left;">Name / नाव</label>
       <input type="text" id="name" name="name" placeholder="Enter your full name" required />
 
-      <label for="phone" style="font-weight: bold; text-align: left; display: block; margin-top: 15px;">Customer Name and Number / कस्टमरचे नाव आणि नंबर</label>
-      <input type="text" id="phone" name="phone" placeholder="" required />
+      
+      <label for="customer1" style="font-weight: bold; display: block; margin-top: 15px; text-align: left;">Customer Name and Number / कस्टमरचे नाव आणि नंबर</label>
+      <input type="text" id="customer1" name="customer1" placeholder="1. Customer Name and Number / कस्टमरचे नाव आणि नंबर" required />
+
+      <input type="text" id="customer2" name="customer2" placeholder="2. Customer Name and Number / कस्टमरचे नाव आणि नंबर" />
+
+      <input type="text" id="customer3" name="customer3" placeholder="3. Customer Name and Number / कस्टमरचे नाव आणि नंबर" />
+
+      <input type="text" id="customer4" name="customer4" placeholder="4. Customer Name and Number / कस्टमरचे नाव आणि नंबर" />
+
+      <input type="text" id="customer5" name="customer5" placeholder="5. Customer Name and Number / कस्टमरचे नाव आणि नंबर" />
 
       <button type="submit">Submit</button>
       <p id="status"></p>
