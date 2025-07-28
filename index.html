@@ -99,8 +99,7 @@
       <input type="text" id="customer3" name="customer3" placeholder="3. Customer Name and Number / कस्टमरचे नाव आणि नंबर" />
       <input type="text" id="customer4" name="customer4" placeholder="4. Customer Name and Number / कस्टमरचे नाव आणि नंबर" />
       <input type="text" id="customer5" name="customer5" placeholder="5. Customer Name and Number / कस्टमरचे नाव आणि नंबर" />
-      <input type="hidden" id="customers" name="customers" />
-      <button type="submit">Submit</button>
+            <button type="submit">Submit</button>
       <p id="status"></p>
     </form>
   </div>
@@ -115,17 +114,7 @@
     status.style.color = 'blue';
     status.textContent = 'Submitting...';
 
-    const allCustomers = [
-      document.getElementById('customer1').value,
-      document.getElementById('customer2').value,
-      document.getElementById('customer3').value,
-      document.getElementById('customer4').value,
-      document.getElementById('customer5').value
-    ].filter(val => val.trim() !== "").join(" ");
-
-    document.getElementById('customers').value = allCustomers;
-
-    const formData = new FormData(form);
+        const formData = new FormData(form);
 
     fetch(scriptURL, { method: 'POST', body: formData })
       .then(response => {
@@ -141,4 +130,5 @@
   </script>
 </body>
 </html>
+
 
