@@ -53,7 +53,7 @@
     <button onclick="restartAutoRefresh()" style="padding: 10px 15px; background-color: #aaa; color: white; border: none; border-radius: 5px; cursor: pointer;">🔄 Show Full Table</button>
   </div>
   <div id="responseTable">Loading responses...</div>
-  
+  <div style="text-align: center; margin-bottom: 30px;">
     <button onclick="saveAsImage()" style="padding: 10px 15px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; margin: 5px; cursor: pointer;">🖼️ Save as Image</button>
     <button onclick="exportPDF()" style="padding: 10px 15px; background-color: #FF5722; color: white; border: none; border-radius: 5px; margin: 5px; cursor: pointer;">🧾 Export PDF</button>
   </div>
@@ -61,9 +61,11 @@
   <script>
     const sheetCSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSz0FQJqiQHn9d6VtIp1tdAK0ARCJzVGQpWH9bAwjP8umXmCUvo6pMGtWPbND744G9o6iXI6XgH-UAG/pub?output=csv';
     const deleteEndpoint = 'https://script.google.com/macros/s/AKfycbxvstjbKjH4m8BkS2Dl_quVybxL6jSyfU1P23H4lmfyeV8E9OiLHFFMsPPXcLlOcBjW/exec';
+    let isGroupedView = false;
+    let refreshInterval = null;
 
     function fetchResponses() {
-      fetch(sheetCSV)
+      fetch(sheetCSV + '&t=' + new Date().getTime())
         .then(res => res.text())
         .then(csv => {
           const rows = csv.split("\n").map(row => row.split(","));
@@ -92,7 +94,8 @@
             deleteBtn.textContent = "🗑️";
             deleteBtn.className = "delete-btn";
             deleteBtn.onclick = () => {
-              const timestamp = row[0];
+              const timestamp = row[0].trim();
+              console.log('🕒 Timestamp sent for deletion:', timestamp);
               if (confirm("Are you sure you want to delete this entry?")) {
                 fetch(deleteEndpoint, {
                   method: "POST",
@@ -104,8 +107,8 @@
                 .then(res => res.text())
                 .then(resp => {
                   if (resp === "Deleted") {
-                    tr.remove();
-                  } else {
+  tr.remove();
+} else {
                     alert("Entry not found or already deleted.");
                   }
                 })
@@ -126,8 +129,9 @@
     }
 
     function showGroupedCustomers() {
+      isGroupedView = true;
       clearInterval(refreshInterval);
-      fetch(sheetCSV)
+      fetch(sheetCSV + '&t=' + new Date().getTime())
         .then(res => res.text())
         .then(csv => {
           const rows = csv.split("\n").map(row => row.split(","));
@@ -181,8 +185,12 @@
     }
 
     function restartAutoRefresh() {
+      isGroupedView = false;
       fetchResponses();
-      refreshInterval = setInterval(fetchResponses, 1000);
+      clearInterval(refreshInterval);
+      refreshInterval = setInterval(() => {
+        if (!isGroupedView) fetchResponses();
+      }, 5000);
     }
 
     function exportPDF() {
@@ -194,9 +202,6 @@
       }, 1000);
     }
 
-    fetchResponses();
-    let refreshInterval = setInterval(fetchResponses, 1000);
-  
     function saveAsImage() {
       const responseTable = document.getElementById('responseTable');
       html2canvas(responseTable).then(canvas => {
@@ -207,11 +212,18 @@
       });
     }
 
-    // Load html2canvas library
     const script = document.createElement('script');
     script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
     script.onload = () => console.log('html2canvas loaded');
     document.body.appendChild(script);
-</script>
+
+    setTimeout(() => {
+      if (!isGroupedView) fetchResponses();
+    }, 200);
+
+    refreshInterval = setI(() => {
+      if (!isGroupedView) fetchResponses();
+    }, 5000);
+  </script>
 </body>
 </html>
