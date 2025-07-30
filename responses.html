@@ -1,63 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Responses</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      font-family: 'Roboto', sans-serif;
+      background: #fff9e6;
       padding: 20px;
+      color: #333;
     }
-    h2 {
+    h1 {
+      color: #b88a44;
       text-align: center;
+      margin-bottom: 20px;
     }
-    .response-entry {
-      background-color: #fff;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      padding: 10px;
-      margin-bottom: 10px;
-      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background: #f7d779;
+      color: #5b420f;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
     }
   </style>
 </head>
 <body>
-  <h2>Live Responses</h2>
-  <div id="response-container"></div>
-
+  <h1>Live Vastu Form Responses</h1>
+  <div style="text-align: center; margin-bottom: 20px;">
+    <button onclick="showGroupedCustomers()" style="padding: 10px 15px; background-color: #b88a44; color: white; border: none; border-radius: 5px; margin-right: 10px; cursor: pointer;">📋 Show All Customers (Grouped)</button>
+    <button onclick="restartAutoRefresh()" style="padding: 10px 15px; background-color: #aaa; color: white; border: none; border-radius: 5px; cursor: pointer;">🔄 Show Full Table</button>
+  </div>
+  <div id="responseTable">Loading responses...</div>
+  <div style="text-align: center; margin-bottom: 30px;">
+    <button onclick="exportPDF()" style="padding: 10px 15px; background-color: #2196F3; color: white; border: none; border-radius: 5px; margin: 5px; cursor: pointer;">🖨️ Print</button>
+    <button onclick="exportPDF()" style="padding: 10px 15px; background-color: #FF5722; color: white; border: none; border-radius: 5px; margin: 5px; cursor: pointer;">🧾 Export PDF</button>
+  </div>
   <script>
-    const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQXOwaP2EMefVZaIdT1PGGzEnkNh_rp5qPzkpkvYjJhWo-pNFRcfAgm61-cEJUElpLLBJxcWCDU1vgu/pub?output=csv';
+    const sheetCSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSz0FQJqiQHn9d6VtIp1tdAK0ARCJzVGQpWH9bAwjP8umXmCUvo6pMGtWPbND744G9o6iXI6XgH-UAG/pub?output=csv';
 
-    async function fetchResponses() {
-      try {
-        const response = await fetch(sheetURL);
-        const data = await response.text();
+    function fetchResponses() {
+      fetch(sheetCSV)
+        .then(res => res.text())
+        .then(csv => {
+          const rows = csv.split("\n").map(row => row.split(","));
+          const table = document.createElement("table");
 
-        const rows = data.trim().split('\n').map(row => row.split(','));
-        const headers = rows[0];
-        const entries = rows.slice(1);
-
-        const container = document.getElementById("response-container");
-        container.innerHTML = "";
-
-        entries.forEach(row => {
-          const entry = document.createElement("div");
-          entry.className = "response-entry";
-          headers.forEach((header, index) => {
-            const p = document.createElement("p");
-            p.textContent = `${header.trim()}: ${row[index] || ''}`;
-            entry.appendChild(p);
+          const header = document.createElement("tr");
+          rows[0].forEach(col => {
+            const th = document.createElement("th");
+            th.textContent = col;
+            header.appendChild(th);
           });
-          container.appendChild(entry);
+          table.appendChild(header);
+
+          rows.slice(1).forEach(row => {
+            const tr = document.createElement("tr");
+            row.forEach(cell => {
+              const td = document.createElement("td");
+              td.textContent = cell;
+              tr.appendChild(td);
+            });
+            table.appendChild(tr);
+          });
+
+          document.getElementById("responseTable").innerHTML = "";
+          document.getElementById("responseTable").appendChild(table);
+        })
+        .catch(err => {
+          document.getElementById("responseTable").textContent = "Failed to load responses.";
         });
-      } catch (err) {
-        console.error("Error fetching responses:", err);
-      }
     }
 
     fetchResponses();
-    setInterval(fetchResponses, 1000);
+    let refreshInterval = setInterval(fetchResponses, 1000);
+
+    function showGroupedCustomers() {
+      clearInterval(refreshInterval);
+      fetch(sheetCSV)
+        .then(res => res.text())
+        .then(csv => {
+          const rows = csv.split("\n").map(row => row.split(","));
+          const headers = rows[0];
+          const customerCols = headers.filter(h => h.toLowerCase().includes("customer"));
+          const customerIndexes = customerCols.map(col => headers.indexOf(col));
+
+          const customersArray = [];
+          rows.slice(1).forEach(row => {
+            const timestamp = row[0];
+            customerIndexes.forEach(i => {
+              const customer = row[i];
+              if (customer) customersArray.push({ customer, timestamp });
+            });
+          });
+
+          customersArray.sort((a, b) => {
+            const numA = a.customer.match(/\d+/);
+            const numB = b.customer.match(/\d+/);
+            return (numA ? parseInt(numA[0]) : 0) - (numB ? parseInt(numB[0]) : 0);
+          });
+
+          const table = document.createElement("table");
+          const tr = document.createElement("tr");
+          const th1 = document.createElement("th");
+          const th2 = document.createElement("th");
+          th1.textContent = "Customer Name & Number";
+          th2.textContent = "Timestamp";
+          tr.appendChild(th1);
+          tr.appendChild(th2);
+          table.appendChild(tr);
+
+          customersArray.forEach(({ customer, timestamp }) => {
+            const tr = document.createElement("tr");
+            const td1 = document.createElement("td");
+            const td2 = document.createElement("td");
+            td1.textContent = customer;
+            td2.textContent = timestamp;
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            table.appendChild(tr);
+          });
+
+          document.getElementById("responseTable").innerHTML = "";
+          document.getElementById("responseTable").appendChild(table);
+        })
+        .catch(err => {
+          document.getElementById("responseTable").textContent = "Failed to load customers.";
+        });
+    }
+
+    function restartAutoRefresh() {
+      fetchResponses();
+      refreshInterval = setInterval(fetchResponses, 1000);
+    }
+
+    function downloadCSV() {
+      fetch(sheetCSV)
+        .then(res => res.blob())
+        .then(blob => {
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = 'vastu_responses.csv';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        });
+    }
+
+    function exportPDF() {
+      const buttons = document.querySelectorAll('button');
+      buttons.forEach(btn => btn.style.display = 'none');
+      window.print();
+      setTimeout(() => {
+        buttons.forEach(btn => btn.style.display = 'inline-block');
+      }, 1000);
+    }
   </script>
 </body>
 </html>
